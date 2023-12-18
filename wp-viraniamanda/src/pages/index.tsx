@@ -1,118 +1,163 @@
 import Image from 'next/image'
 import { Inter } from 'next/font/google'
+import axios from 'axios'
+import { GetServerSideProps } from 'next'
+import { IAPIResponse } from '@/interface/iapi'
+import { useEffect, useState } from 'react'
+import Category from '@/components/category'
 
 const inter = Inter({ subsets: ['latin'] })
 
+interface IData{
+  id: number
+  attributes:{
+    judul: string
+    slug: string
+    narasi: string
+    tanggal: string | Date
+    publishedAt?: string | Date
+    gambar:{
+      data:{
+        id: Number
+        attributes:{
+          name:string
+          alternativeText?:string
+          formats:{
+            thumbnail:{
+              ext: string
+              url: string
+              hash: string
+              name: string
+            }
+          }
+          url: string
+        }
+      }
+    }
+  }
+  
+}
 export default function Home() {
+  const [data, setData] = useState<IAPIResponse<IData[]>>();
+
+  const getCategories = async () => {
+    try {
+      const res = await axios.get(`https://diskopukm.palembang.go.id/api/beritas?sort[0]=tanggal%3Adesc&pagination[pageSize]=9&populate=*`);
+
+      const data = (res.data as IAPIResponse<IData[]>);
+      setData(data)
+    } catch (e) {
+      if (axios.isAxiosError(e)) {
+       console.log("error");
+       
+      }
+    }
+  };
+  useEffect(() => {
+    getCategories();
+  }, []);
+
   return (
     <main
       className={`flex min-h-screen flex-col items-center justify-between p-24 ${inter.className}`}
     >
-      <div className="z-10 max-w-5xl w-full items-center justify-between font-mono text-sm lg:flex">
-        <p className="fixed left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
-          Get started by editing&nbsp;
-          <code className="font-mono font-bold">src/pages/index.tsx</code>
-        </p>
-        <div className="fixed bottom-0 left-0 flex h-48 w-full items-end justify-center bg-gradient-to-t from-white via-white dark:from-black dark:via-black lg:static lg:h-auto lg:w-auto lg:bg-none">
-          <a
-            className="pointer-events-none flex place-items-center gap-2 p-8 lg:pointer-events-auto lg:p-0"
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{' '}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className="dark:invert"
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
+     <div  >
+      <div className='w-full flex justify-between flex items-cener py-5' >
+         <div className='flex w-[24%]  items-center' >
+            <Image alt="logo"  width={100} height={24} src='/assets/logo.png' style={{height:"70px", width:"auto"}}/>
+            <div className='text-3xl font-bold pl-4'> 
+                  <p className='text-xl text-[#016ABF]' >Koperasi</p> 
+                  <p className='text-sm'>Kota Palembang</p>
+            </div>
+          </div>
+          <div className='flex w-[75%] items-center justify-between font-sm'>
+            <p className='font-sm'>Beranda</p>
+            <p>Profil</p>
+            <p>Berita</p>
+            <p>Bidang</p>
+            <p>Galeri</p>
+            <p>Survey Kepuasan</p>
+            <p>Informasi</p>
+          </div>
+      </div>
+      <div></div>
+      <div>
+        <Image alt='' src={'/assets/banner.png'} height={1000} width={1000} className='w-full h-full'/>
+      </div>
+      <div className='text-center justify-center '>
+        <p className='text-2xl font-bold justify-center flex py-5'>Cari Berdasarkan</p>
+        <div className='flex items-center justify-between'>
+         
+          <Category  src='/assets/agenda-pelatihan.png' text='Agenda Pelatihan'/>
+          <Category  src='/assets/galeri.png' text='Galeri'/>
+          <Category  src='/assets/konsultasi-koperasi.png' text='Konsultasi Koperasi'/>
+          <Category src='/assets/konsultasi-umkm.png' text='Konsultasi UMKM'/>
+          <Category src='/assets/pendataan-koperasi.png' text='Pendataan Koperasi'/>
+          <Category  src='/assets/pendataan-umkm.png' text='Pendataan UMKM'/>
         </div>
       </div>
-
-      <div className="relative flex place-items-center before:absolute before:h-[300px] before:w-[480px] before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-[240px] after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700/10 after:dark:from-sky-900 after:dark:via-[#0141ff]/40 before:lg:h-[360px]">
-        <Image
-          className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert"
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
+      <div className='flex w-full gap-5 py-10 items-center'>
+        <div className='w-[40%]'>
+        <Image alt='' src='/assets/person.png' className='h-auto w-full' height={100} width={200}/>  
+        </div>
+        <div className='w-[60%]'>
+          <p className='text-sm py-2 text-[#016ABF]'>Selayang Pandang</p>
+          <p className='text-xl font-bold py-2'>Selamat Datang di Dinas PPKUKM Kota Palembang</p>
+          <p className='text-sm py-2'>ida berenang di Sungai Musi
+Selamat datang di web PPKUKM Kota Palembang
+Semoga dapat memberikan informasi
+Kita wujudkan visi Palembang Emas Darussalam 2023
+"Pengelolaan Keuangan & Aset Daerah yang Akuntabel menuju Opini Laporan Keuangan WTP"</p>
+        </div>
       </div>
-
-      <div className="mb-32 grid text-center lg:max-w-5xl lg:w-full lg:mb-0 lg:grid-cols-4 lg:text-left">
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Docs{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Find in-depth information about Next.js features and API.
-          </p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Learn{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Learn about Next.js in an interactive course with&nbsp;quizzes!
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Templates{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Discover and deploy boilerplate example Next.js&nbsp;projects.
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Deploy{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
+      <div >
+        <div className='flex items-center justify-between'>
+        <p className='font-xl border-l font-bold'>Berita PPUKM</p>
+        <p className='font-md'>Selengkapnya -&gt;</p>
+        </div>
+        <div className='flex'>
+          {data?.data?.map((v,i)=>(
+            <div className='w-1/3'> 
+            <img src={v.attributes.gambar.data.attributes.name} alt="image"  />
+           
+            <p> {v.attributes.judul.length > 25
+                ? `${v.attributes.judul.substring(0, 25)}...`
+                : v.attributes.judul}</p> 
+ {/* <Image key={i} alt='' src={v.gambar.data.attributes.url} height={100} width={100}/> */}
+ </div>
+          
+          ))}
+        
+        </div>
+        
       </div>
+     
+      
+    </div>
     </main>
   )
 }
+
+// export const getServerSideProps: GetServerSideProps = async (
+// ) => {
+//   try {
+//     const response = await axios.get(`https://diskopukm.palembang.go.id/api/beritas?sort[0]=tanggal%3Adesc&pagination[pageSize]=9&populate=*`);
+//     const data = (response.data as IData).attributes;
+
+//     const res = await axios.get(`https://diskopukm.palembang.go.id/api/beritas?sort[0]=tanggal%3Adesc&pagination[pageSize]=9&populate=*`);
+//     const image = (res.data as IData).gambar;
+
+//     return {
+//       props: {
+//         data,
+//         image
+//       },
+//     };
+//   } catch (error) {
+//     console.error("Error fetching data:", error);
+
+//     return {
+//       notFound: true,
+//     };
+//   }
+// };
