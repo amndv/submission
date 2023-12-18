@@ -5,6 +5,7 @@ import { GetServerSideProps } from 'next'
 import { IAPIResponse } from '@/interface/iapi'
 import { useEffect, useState } from 'react'
 import Category from '@/components/category'
+import Infografis from '@/components/infografis'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -59,7 +60,7 @@ export default function Home() {
 
   return (
     <main
-      className={`flex min-h-screen flex-col items-center justify-between p-24 ${inter.className}`}
+      className={`flex min-h-screen flex-col items-center justify-between px-24 ${inter.className}`}
     >
      <div  >
       <div className='w-full flex justify-between flex items-cener py-5' >
@@ -101,7 +102,7 @@ export default function Home() {
         <Image alt='' src='/assets/person.png' className='h-auto w-full' height={100} width={200}/>  
         </div>
         <div className='w-[60%]'>
-          <p className='text-sm py-2 text-[#016ABF]'>Selayang Pandang</p>
+          <p className='text-sm py-2 text-[#016ABF] cursor-pointer'>Selayang Pandang</p>
           <p className='text-xl font-bold py-2'>Selamat Datang di Dinas PPKUKM Kota Palembang</p>
           <p className='text-sm py-2'>ida berenang di Sungai Musi
 Selamat datang di web PPKUKM Kota Palembang
@@ -110,18 +111,18 @@ Kita wujudkan visi Palembang Emas Darussalam 2023
 "Pengelolaan Keuangan & Aset Daerah yang Akuntabel menuju Opini Laporan Keuangan WTP"</p>
         </div>
       </div>
-      <div >
-        <div className='flex items-center justify-between'>
-        <p className='font-xl border-l font-bold'>Berita PPUKM</p>
-        <p className='font-md'>Selengkapnya -&gt;</p>
+      <div className=''>
+        <div className='flex items-center justify-between py-3'>
+          <p className='text-xl font-bold gap-2'> <span className='font-bold text-[#016ABF]'>|</span>Berita PPUKM</p>
+          <p className='text-sm text-[#016ABF]'>Selengkapnya -&gt;</p>
         </div>
         <div className='flex'>
           {data?.data?.map((v,i)=>(
-            <div className='w-1/3'> 
+            <div className='grid grid-rows-3'> 
             <img src={v.attributes.gambar.data.attributes.name} alt="image"  />
            
-            <p> {v.attributes.judul.length > 25
-                ? `${v.attributes.judul.substring(0, 25)}...`
+            <p> {v.attributes.judul.length > 35
+                ? `${v.attributes.judul.substring(0, 35)}...`
                 : v.attributes.judul}</p> 
  {/* <Image key={i} alt='' src={v.gambar.data.attributes.url} height={100} width={100}/> */}
  </div>
@@ -129,7 +130,43 @@ Kita wujudkan visi Palembang Emas Darussalam 2023
           ))}
         
         </div>
-        
+      </div>
+      <div className=' w-full'>
+        <p className='flex gap-2 text-xl font-bold pb-3 '> <span className='font-bold text-[#016ABF]'>|</span> Video UMKM</p>
+       <div className='flex gap-3'>
+       <div className='w-[75%] gap-y-5'>
+              <div>
+                <Image alt=''src='/assets/yt.png' height={100} width={100} className='w-full'/>
+                <p>Wawako Memantau Pendistribusian Bantuan dari Yayasan Budha Tzu Chi di Rumah...</p>
+             <p className='text-sm'>Selasa, 21 Februari 2022</p>
+              </div>
+              <div className='flex gap-5'>
+                <div>
+                  <Image alt=''src='/assets/yt.png' height={100} width={100} className='w-full'/>
+                  <p>Wawako Memantau Pendistribusian Bantuan dari Yayasan Budha Tzu Chi di Rumah...</p>
+                  <p className='text-sm'>Selasa, 21 Februari 2022</p>
+                </div>
+                <div>
+                  <Image alt=''src='/assets/yt.png' height={100} width={100} className='w-full'/>
+                  <p>Wawako Memantau Pendistribusian Bantuan dari Yayasan Budha Tzu Chi di Rumah...</p>
+                 <p className='text-sm'>Selasa, 21 Februari 2022</p>
+                </div>
+              </div>
+        </div>
+        <div className='w-[25%]'>
+          <div >
+         <div className='flex items-center justify-between'>
+         <p className='flex gap-2 text-xl font-bold'> <span className='font-bold text-[#016ABF]'>|</span>Infografis</p>
+          <p className='text-sm text-[#016ABF]'>Lihat lainnya -&gt;</p>
+         </div>
+              <div>
+                  <Infografis src='/assets/infografis.png' text="Selamat hari raya natal"/> 
+                  <Infografis src='/assets/infografis.png' text="Selamat hari raya natal"/> 
+                  <Infografis src='/assets/infografis.png' text="Selamat hari raya natal"/> 
+              </div>
+          </div>
+        </div>
+       </div>
       </div>
      
       
